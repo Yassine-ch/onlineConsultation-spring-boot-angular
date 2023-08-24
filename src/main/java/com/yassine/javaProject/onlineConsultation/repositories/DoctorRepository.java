@@ -1,6 +1,7 @@
 package com.yassine.javaProject.onlineConsultation.repositories;
 
-import com.yassine.project.onlineConsultation.models.Doctor;
+import com.yassine.javaProject.onlineConsultation.models.Doctor;
+
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
