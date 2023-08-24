@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200") //To Link with Angular
 @RequestMapping("/api/consultations")
 public class ConsultationController {
 
