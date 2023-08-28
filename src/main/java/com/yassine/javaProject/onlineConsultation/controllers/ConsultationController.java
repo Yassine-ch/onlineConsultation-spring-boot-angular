@@ -12,25 +12,25 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200") //To Link with Angular
-@RequestMapping("/api/consultations")
+@RequestMapping("/api")
 public class ConsultationController {
 
     @Autowired
     private ConsultationService consultationService;
 
     // Create a new consultation
-    @PostMapping
+    @PostMapping("/consultation")
     public ResponseEntity<Consultation> createConsultation(@RequestBody Consultation consultation) {
         Consultation createdConsultation = consultationService.create(consultation);
         return new ResponseEntity<>(createdConsultation, HttpStatus.CREATED);
     }
 
     // Get all consultations
-    @GetMapping
+    @GetMapping("/consultations")
     public ResponseEntity<List<Consultation>> getAllConsultations() {
         List<Consultation> consultations = consultationService.findAllConsultation();
         return new ResponseEntity<>(consultations, HttpStatus.OK);
-    }
+}
 
     // Get a specific consultation by ID
     @GetMapping("/{id}")
