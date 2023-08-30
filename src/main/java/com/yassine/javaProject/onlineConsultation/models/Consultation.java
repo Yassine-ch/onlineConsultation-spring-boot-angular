@@ -1,22 +1,24 @@
 package com.yassine.javaProject.onlineConsultation.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Data
 @Table(name="consultations")
 public class Consultation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
+
+    @Size(min = 3, max = 30, message = "status must be between 3 and 30 characters")
+    private String status;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
@@ -28,19 +30,24 @@ public class Consultation {
     @Size(min = 3, max = 30, message = "concerns must be between 3 and 30 characters")
     private String concerns;
 
-    @Size(min = 3, max = 30, message = "medications must be between 3 and 30 characters")
-    private String medications;
 
+    @NotEmpty(message = "diseases are required!")
     @Size(min = 3, max = 30, message = "diseases must be between 3 and 30 characters")
     private String diseases;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="doctor_id")
     private Doctor doctor;
-
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="patient_id")
     private Patient patient;
+
+    // Note One To Many
+    @JsonIgnore
+    @OneToMany(mappedBy="consultation", fetch=FetchType.LAZY)
+    private List<Note> notes;
+
 
 
     @Column(updatable = false)
@@ -50,26 +57,35 @@ public class Consultation {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
-//ALL ARGS CONSTRUCTOR
-    public Consultation(Long id, Date startTime, Date endTime, String concerns, String medications, String diseases) {
-        this.id = id;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.concerns = concerns;
-        this.medications = medications;
-        this.diseases = diseases;
-    }
-    //NO ARGS CONSTRUCTOR
-    public Consultation() {
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Date();
     }
 
-    //GETTERS&&&SETTERS
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Date();
+    }
+
+    public Consultation () {
+
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Date getStartTime() {
@@ -96,14 +112,6 @@ public class Consultation {
         this.concerns = concerns;
     }
 
-    public String getMedications() {
-        return medications;
-    }
-
-    public void setMedications(String medications) {
-        this.medications = medications;
-    }
-
     public String getDiseases() {
         return diseases;
     }
@@ -128,6 +136,16 @@ public class Consultation {
         this.patient = patient;
     }
 
+
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -143,4 +161,7 @@ public class Consultation {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+
+
 }

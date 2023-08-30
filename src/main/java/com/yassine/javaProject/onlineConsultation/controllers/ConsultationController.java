@@ -11,50 +11,52 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200") //To Link with Angular
 @RequestMapping("/api")
 public class ConsultationController {
 
     @Autowired
     private ConsultationService consultationService;
 
-    // Create a new consultation
-    @PostMapping("/consultation")
-    public ResponseEntity<Consultation> createConsultation(@RequestBody Consultation consultation) {
-        Consultation createdConsultation = consultationService.create(consultation);
-        return new ResponseEntity<>(createdConsultation, HttpStatus.CREATED);
-    }
+    // Create One Consultation
+//    @PostMapping(value = "/consultations")
+//    public ResponseEntity<Consultation> createConsultation(@RequestBody Consultation consultation) {
+//        Consultation consultationCreated = consultationService.create(consultation);
+//        return new ResponseEntity<>(consultationCreated, HttpStatus.CREATED);
+//    }
+    ///*/*/*/*/* CONSULATATION WITH DOCTOR ID
 
-    // Get all consultations
+    @PostMapping("/consultation/create/{patientId}/{doctorId}")
+    public Consultation addConsultationWithDoctorId(
+            @RequestBody Consultation cc,
+            @PathVariable("doctorId") Long doctorID,
+            @PathVariable("patientId") Long patientID)
+    {
+        return consultationService.addConsultationWithDoctorID(cc, doctorID, patientID);
+    }
+    // Get All Consultations
     @GetMapping("/consultations")
     public ResponseEntity<List<Consultation>> getAllConsultations() {
-        List<Consultation> consultations = consultationService.findAllConsultation();
-        return new ResponseEntity<>(consultations, HttpStatus.OK);
-}
-
-    // Get a specific consultation by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Consultation> getConsultationById(@PathVariable Long id) {
-        Consultation consultation = consultationService.findOneById(id);
-        if (consultation != null) {
-            return new ResponseEntity<>(consultation, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        List<Consultation> allConsultations = consultationService.findAllConsultation();
+        return new ResponseEntity<>(allConsultations, HttpStatus.OK);
     }
 
-    // Update a consultation
-    @PutMapping("/{id}")
-    public ResponseEntity<Consultation> updateConsultation(@PathVariable Long id, @RequestBody Consultation consultationDetails) {
+    // Find One Consultation
+    @GetMapping("/consultations/{id}")
+    public ResponseEntity<Consultation> getOneConsultation(@PathVariable Long id) {
+        Consultation oneConsultation = consultationService.findOneById(id);
+        return new ResponseEntity<>(oneConsultation, HttpStatus.OK);
+    }
+
+    // Update One Consultation
+    @PutMapping("/consultations/{id}")
+    public ResponseEntity<Consultation> updateOneConsultation(@PathVariable Long id, @RequestBody Consultation consultation) {
         Consultation existingConsultation = consultationService.findOneById(id);
         if (existingConsultation != null) {
-            existingConsultation.setStartTime(consultationDetails.getStartTime());
-            existingConsultation.setEndTime(consultationDetails.getEndTime());
-            existingConsultation.setConcerns(consultationDetails.getConcerns());
-            existingConsultation.setMedications(consultationDetails.getMedications());
-            existingConsultation.setDiseases(consultationDetails.getDiseases());
-            // add other fields as needed
-            Consultation updatedConsultation = consultationService.update(existingConsultation);
+            existingConsultation.setStatus(consultation.getStatus());
+            existingConsultation.setStartTime(consultation.getStartTime());
+            existingConsultation.setEndTime(consultation.getEndTime());
+            existingConsultation.setConcerns(consultation.getConcerns());
+            Consultation updatedConsultation = consultationService.update(consultation);
             return new ResponseEntity<>(updatedConsultation, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -62,7 +64,7 @@ public class ConsultationController {
     }
 
     // Delete a consultation by ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/consultations/{id}")
     public ResponseEntity<Consultation> deleteConsultation(@PathVariable Long id) {
         consultationService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
