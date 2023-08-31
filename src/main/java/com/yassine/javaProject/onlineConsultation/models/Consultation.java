@@ -1,5 +1,6 @@
 package com.yassine.javaProject.onlineConsultation.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -34,14 +35,15 @@ public class Consultation {
     @NotEmpty(message = "diseases are required!")
     @Size(min = 3, max = 30, message = "diseases must be between 3 and 30 characters")
     private String diseases;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="patient_id")
+    @JsonBackReference
+    private Patient patient;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="doctor_id")
     private Doctor doctor;
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="patient_id")
-    private Patient patient;
+
+
 
     // Note One To Many
     @JsonIgnore

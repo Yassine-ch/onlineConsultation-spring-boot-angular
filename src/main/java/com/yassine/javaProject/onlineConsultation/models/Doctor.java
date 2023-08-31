@@ -1,11 +1,17 @@
 package com.yassine.javaProject.onlineConsultation.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -67,11 +73,13 @@ public class Doctor {
     // Review One To Many
     @JsonIgnore
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Review> doctorReviews;
 
     // Consultation One To Many
     @JsonIgnore
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Consultation> doctorConsultations;
 
     // Prescription One To Many
@@ -83,6 +91,7 @@ public class Doctor {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="address_id")
+    @JsonBackReference
     private Address address;
 
     public Doctor() {
@@ -120,6 +129,7 @@ public class Doctor {
     public void setProficiency(String proficiency) {
         this.proficiency = proficiency;
     }
+    @JsonIgnore
 
     public List<Consultation> getDoctorConsultations() {
         return doctorConsultations;

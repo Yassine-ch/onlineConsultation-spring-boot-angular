@@ -1,13 +1,13 @@
 package com.yassine.javaProject.onlineConsultation.controllers;
 
 
+import com.yassine.javaProject.onlineConsultation.models.Doctor;
 import com.yassine.javaProject.onlineConsultation.models.Patient;
 import com.yassine.javaProject.onlineConsultation.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/patient")
@@ -28,5 +28,10 @@ public class PatientController {
             return existingPatient;
         }
         return null;
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Patient> getOnePatient(@PathVariable Long id) {
+        Patient onePatient = patientService.findPatient(id);
+        return new ResponseEntity<>(onePatient, HttpStatus.OK);
     }
 }

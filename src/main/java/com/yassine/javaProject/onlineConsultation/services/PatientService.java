@@ -1,9 +1,12 @@
 package com.yassine.javaProject.onlineConsultation.services;
 
+import com.yassine.javaProject.onlineConsultation.models.Doctor;
 import com.yassine.javaProject.onlineConsultation.models.Patient;
 import com.yassine.javaProject.onlineConsultation.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -18,4 +21,11 @@ public class PatientService {
     public Patient findByEmail(String email) {
         return patientRepository.findByEmail(email);
     }
+    // Find one
+    public Patient findPatient(Long id) {
+        Optional<Patient> optionalPatient = patientRepository.findById(id);
+
+            return optionalPatient.get();
+    }
+
 }

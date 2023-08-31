@@ -1,6 +1,8 @@
 package com.yassine.javaProject.onlineConsultation.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -51,18 +53,26 @@ public class Patient {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
+//M.M
 
+    //M:M
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "allConsultation",
+            joinColumns = @JoinColumn(name = "patient_id"),
+            inverseJoinColumns = @JoinColumn(name="doctor_id"))
+    private List <Doctor> doctors;
 // Review One To Many
-@JsonIgnore
+
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     private List<Review> patientReviews;
     // Consultation One To Many
-    @JsonIgnore
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     private List<Consultation> patientConsultations;
 
     // Prescription One To Many
-    @JsonIgnore
+
+
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     private List<Prescription> patientPrescriptions;
 
