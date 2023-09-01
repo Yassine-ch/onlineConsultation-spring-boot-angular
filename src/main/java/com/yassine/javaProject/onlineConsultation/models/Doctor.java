@@ -2,6 +2,7 @@ package com.yassine.javaProject.onlineConsultation.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -16,7 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table(name="doctors")
 public class Doctor {
@@ -71,27 +72,28 @@ public class Doctor {
     }
 
     // Review One To Many
-    @JsonIgnore
+
+
+
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<Review> doctorReviews;
 
     // Consultation One To Many
-    @JsonIgnore
+
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
-    @JsonManagedReference
+
     private List<Consultation> doctorConsultations;
 
     // Prescription One To Many
-    @JsonIgnore
+
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<Prescription> doctorPrescriptions;
 
     // Address Many to One
-    @JsonIgnore
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="address_id")
-    @JsonBackReference
+
     private Address address;
 
     public Doctor() {

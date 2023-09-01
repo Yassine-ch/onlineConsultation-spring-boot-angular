@@ -14,11 +14,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name="patients")
 public class Patient {
 
@@ -54,24 +51,49 @@ public class Patient {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
 //M.M
-
-    //M:M
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "allConsultation",
-            joinColumns = @JoinColumn(name = "patient_id"),
-            inverseJoinColumns = @JoinColumn(name="doctor_id"))
-    private List <Doctor> doctors;
+//@JsonIgnore
+//    //M:M
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "allConsultation",
+//            joinColumns = @JoinColumn(name = "patient_id"),
+//            inverseJoinColumns = @JoinColumn(name="doctor_id"))
+//    private List <Doctor> doctors;
 // Review One To Many
 
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     private List<Review> patientReviews;
     // Consultation One To Many
+
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     private List<Consultation> patientConsultations;
 
     // Prescription One To Many
 
+
+    public List<Review> getPatientReviews() {
+        return patientReviews;
+    }
+
+    public void setPatientReviews(List<Review> patientReviews) {
+        this.patientReviews = patientReviews;
+    }
+    @JsonIgnore
+    public List<Consultation> getPatientConsultations() {
+        return patientConsultations;
+    }
+
+    public void setPatientConsultations(List<Consultation> patientConsultations) {
+        this.patientConsultations = patientConsultations;
+    }
+
+    public List<Prescription> getPatientPrescriptions() {
+        return patientPrescriptions;
+    }
+
+    public void setPatientPrescriptions(List<Prescription> patientPrescriptions) {
+        this.patientPrescriptions = patientPrescriptions;
+    }
 
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     private List<Prescription> patientPrescriptions;

@@ -2,6 +2,7 @@ package com.yassine.javaProject.onlineConsultation.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -9,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 
 @Entity
 @Table(name="consultations")
@@ -35,9 +37,9 @@ public class Consultation {
     @NotEmpty(message = "diseases are required!")
     @Size(min = 3, max = 30, message = "diseases must be between 3 and 30 characters")
     private String diseases;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="patient_id")
-    @JsonBackReference
     private Patient patient;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="doctor_id")
@@ -46,7 +48,7 @@ public class Consultation {
 
 
     // Note One To Many
-    @JsonIgnore
+
     @OneToMany(mappedBy="consultation", fetch=FetchType.LAZY)
     private List<Note> notes;
 

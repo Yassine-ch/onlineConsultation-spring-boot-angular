@@ -198,8 +198,14 @@
 package com.yassine.javaProject.onlineConsultation.controllers;
 
 import com.yassine.javaProject.onlineConsultation.models.Consultation;
+import com.yassine.javaProject.onlineConsultation.models.Doctor;
+import com.yassine.javaProject.onlineConsultation.models.Patient;
 import com.yassine.javaProject.onlineConsultation.services.ConsultationService;
+import com.yassine.javaProject.onlineConsultation.services.DoctorService;
+import com.yassine.javaProject.onlineConsultation.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -211,6 +217,10 @@ public class ConsultationController {
 
     @Autowired
     private ConsultationService consultationService;
+    @Autowired
+    private DoctorService doctorService;
+    @Autowired
+    private PatientService patientService;
 
     // Create a new consultation
     @PostMapping
@@ -258,10 +268,17 @@ public class ConsultationController {
     }
 
     // Add consultation with doctor ID
-    @PostMapping("/withDoctor/{doctorId}")
-    public ResponseEntity<Consultation> addConsultationWithDoctor(@RequestBody Consultation consultation, @PathVariable Long doctorId ,  @PathVariable Long patientId) {
-        return ResponseEntity.ok(consultationService.addConsultationWithDoctorID(consultation, doctorId,patientId));
-    }
+    @PostMapping("/withDoctor/{doctorId}/{patientId}")
+    public ResponseEntity<Consultation> addConsultationWithDoctor(@RequestBody Consultation consultation,
+                                                                  @PathVariable Long doctorId ,
+                                                                  @PathVariable Long patientId) {
+        Doctor doctor= doctorService.findDoctor((Long) doctorId);
+        Patient patient= patientService.findPatient((Long) patientId);
+
+        consultation.setDoctor(doctor);
+        consultation.setPatient(patient);
+        Consultation consultationCreated = consultationService.create(consultation);
+return new ResponseEntity<>(consultationCreated, HttpStatus.CREATED);    }
 
     // Add a consultation with details
 //     This endpoint requires more detailed input, perhaps you can adjust this endpoint to suit your needs, or use a DTO to collect the necessary information.

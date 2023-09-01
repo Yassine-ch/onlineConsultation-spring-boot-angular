@@ -29,7 +29,16 @@ public class PatientController {
         }
         return null;
     }
-    @GetMapping("/{id}")
+
+
+    // Create One Patient
+    @PostMapping(value = "/patients")
+    public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) {
+        Patient patientCreated = patientService.createPatient(patient);
+        return new ResponseEntity<>(patientCreated, HttpStatus.CREATED);
+    }
+    // Find One Patient
+    @GetMapping("/patients/{id}")
     public ResponseEntity<Patient> getOnePatient(@PathVariable Long id) {
         Patient onePatient = patientService.findPatient(id);
         return new ResponseEntity<>(onePatient, HttpStatus.OK);
