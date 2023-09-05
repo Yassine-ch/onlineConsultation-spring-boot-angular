@@ -32,8 +32,9 @@ public class ConsultationService {
         return consultationRepository.save(consultation);
     }
 
-    // Read All Consultation
-    public List<Consultation> findAllConsultation() {
+
+    //Read All Consultation
+    public List<Consultation> findAllConsultation(){
         return consultationRepository.findAll();
     }
 

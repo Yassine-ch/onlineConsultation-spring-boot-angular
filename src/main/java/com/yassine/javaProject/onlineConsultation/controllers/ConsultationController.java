@@ -212,7 +212,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/consultations")
+@RequestMapping("/api")
 public class ConsultationController {
 
     @Autowired
@@ -228,10 +228,11 @@ public class ConsultationController {
         return ResponseEntity.ok(consultationService.create(consultation));
     }
 
-    // Get all consultations
-    @GetMapping
+    // Get All Consultations
+    @GetMapping("/consultations")
     public ResponseEntity<List<Consultation>> getAllConsultations() {
-        return ResponseEntity.ok(consultationService.findAllConsultation());
+        List<Consultation> allConsultations = consultationService.findAllConsultation();
+        return new ResponseEntity<>(allConsultations, HttpStatus.OK);
     }
 
     // Update a consultation
