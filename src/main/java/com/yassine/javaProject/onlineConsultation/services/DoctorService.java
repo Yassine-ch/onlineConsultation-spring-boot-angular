@@ -46,4 +46,8 @@ public class DoctorService {
     public Doctor updateDoctor(Doctor doctor) {
         return doctorRepository.save(doctor);
     }
+    //COUNT
+    public long getNumberOfDoctors() {
+        return doctorRepository.count();
+    }
 }

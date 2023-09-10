@@ -17,4 +17,6 @@ public interface DoctorRepository extends CrudRepository <Doctor,Long> {
 //
 //    @Override
 //    Optional findById(Object o);
+    //count
+    long count();
 }

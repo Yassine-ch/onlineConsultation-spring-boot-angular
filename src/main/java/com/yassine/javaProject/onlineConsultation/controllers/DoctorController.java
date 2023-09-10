@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -70,4 +72,11 @@ public class DoctorController {
         doctorService.deleteDoctor(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    //COUNT
+    @GetMapping("/doctors/count")
+    public ResponseEntity<Map<String, Long>> getNumberOfDoctors() {
+        long count = doctorService.getNumberOfDoctors();
+        return ResponseEntity.ok(Collections.singletonMap("count", count));
+    }
+
 }
