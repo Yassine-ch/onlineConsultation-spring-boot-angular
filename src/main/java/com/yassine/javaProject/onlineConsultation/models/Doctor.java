@@ -18,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
+
 @Entity
 @Table(name="doctors")
 public class Doctor {
@@ -50,7 +51,7 @@ public class Doctor {
     private String password;
 
     @Transient
-    @NotEmpty(message = "Confirm Password is required!")
+//    @NotEmpty(message = "Confirm Password is required!")
     @Size(min = 8, max = 128, message = "Confirm Password must be between 8 and 128 characters")
     private String confirmPassword;
 
